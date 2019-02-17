@@ -17,23 +17,30 @@ def get_current_ip
 end
 
 def get_previous_ip
-
+	File.open("previous_ip").read
 end
 
 def log(message)
+	current_time = Time.now
+	message = current_time.to_s + "\t" + message.to_s
 
+	File.open("/var/log/dynamic_dns.log", "a+") { |f| f.puts(message) }
 end
 
 def log_ip_change(previous_ip, current_ip)
-
+	log("Old IP used to be: #{previous_ip} \t New IP is: #{current_ip}")
 end
 
 def log_no_change
-
+	log("Job ran with no IP address change")
 end
 
 def log_error(message)
+	log("Error: #{message}")
+end
 
+def update_previous_ip!(new_ip)
+	File.open('previous_ip', 'w').write(new_ip)
 end
 
 def update_dns!(new_ip)
@@ -52,7 +59,7 @@ def update_dns!(new_ip)
 
 	http.use_ssl = url.port == 443
 	res = http.start { |http| http.request(req) }
-
+	update_previous_ip!(new_ip)
 end
 
 def ensure_valid_variables!(host, domain_name, ddns_password, ip_address)
