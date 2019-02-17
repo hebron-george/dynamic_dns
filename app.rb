@@ -9,19 +9,23 @@ def update_ip_address!
 	end	
 end
 
+def project_dir
+	File.expand_path(File.dirname(__FILE__)) + "/"
+end
+
 def get_current_ip
 	`curl -s checkip.dyndns.org | sed -e 's/.*Current IP Address: //' -e 's/<.*$//'`.strip
 end
 
 def get_previous_ip
-	File.open("previous_ip").read
+	File.open(project_dir + "previous_ip").read
 end
 
 def log(message)
 	current_time = Time.now
 	message = current_time.to_s + "\t" + message.to_s
 
-	File.open("logs/dynamic_dns.log", "a+") { |f| f.puts(message) }
+	File.open(project_dir + "logs/dynamic_dns.log", "a+") { |f| f.puts(message) }
 end
 
 def log_ip_change(previous_ip, current_ip)
