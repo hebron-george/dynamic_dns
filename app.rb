@@ -5,8 +5,7 @@ def update_ip_address!
 	previous_ip = get_previous_ip
 
 	if current_ip != previous_ip
-		log_ip_change(previous_ip, current_ip)
-		update_dns!(current_ip)
+		update_dns!(previous_ip, current_ip)
 	else
 		log_no_change
 	end	
@@ -24,7 +23,7 @@ def log(message)
 	current_time = Time.now
 	message = current_time.to_s + "\t" + message.to_s
 
-	File.open("/var/log/dynamic_dns.log", "a+") { |f| f.puts(message) }
+	File.open("logs/dynamic_dns.log", "a+") { |f| f.puts(message) }
 end
 
 def log_ip_change(previous_ip, current_ip)
@@ -40,10 +39,11 @@ def log_error(message)
 end
 
 def update_previous_ip!(new_ip)
+	log_ip_change(previous_ip, current_ip)
 	File.open('previous_ip', 'w').write(new_ip)
 end
 
-def update_dns!(new_ip)
+def update_dns!(previous_ip, new_ip)
 	host = '@'
 	domain_name   = ENV['DYNAMIC_DNS_DOMAIN_NAME']
 	ddns_password = ENV['DDNS_PASSWORD']
@@ -59,7 +59,7 @@ def update_dns!(new_ip)
 
 	http.use_ssl = url.port == 443
 	res = http.start { |http| http.request(req) }
-	update_previous_ip!(new_ip)
+	update_previous_ip!(previous_ip, new_ip)
 end
 
 def ensure_valid_variables!(host, domain_name, ddns_password, ip_address)
