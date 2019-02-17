@@ -42,7 +42,7 @@ end
 
 def update_previous_ip!(previous_ip, new_ip)
 	log_ip_change(previous_ip, new_ip)
-	File.open('previous_ip', 'w').write(new_ip)
+	File.open(project_dir + 'previous_ip', 'w').write(new_ip)
 end
 
 def update_dns!(previous_ip, new_ip)
