@@ -40,7 +40,7 @@ def log_error(message)
 	log("Error: #{message}")
 end
 
-def update_previous_ip!(new_ip)
+def update_previous_ip!(previous_ip, new_ip)
 	log_ip_change(previous_ip, current_ip)
 	File.open('previous_ip', 'w').write(new_ip)
 end
