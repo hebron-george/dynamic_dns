@@ -1,5 +1,3 @@
-#/home/pi/.rvm/rubies/ruby-2.6.0/bin/ruby
-
 def update_ip_address!
 	current_ip  = get_current_ip
 	previous_ip = get_previous_ip
