@@ -46,14 +46,14 @@ def update_previous_ip!(previous_ip, new_ip)
 end
 
 def update_dns!(previous_ip, new_ip)
-	host = '@'
-	domain_name   = ENV['DYNAMIC_DNS_DOMAIN_NAME']
+	host          = ENV['HOST']
+       domain_name   = ENV['DYNAMIC_DNS_DOMAIN_NAME']
 	ddns_password = ENV['DDNS_PASSWORD']
 
 	ensure_valid_variables!(host, domain_name, ddns_password, new_ip)
 	
 	url = "https://dynamicdns.park-your-domain.com/update?host=#{host}&domain=#{domain_name}&password=#{ddns_password}&ip=#{new_ip}"
-	require 'net/https'
+       require 'net/https'
 
 	url  = URI.parse(url)
 	http = Net::HTTP.new(url.host, url.port)
