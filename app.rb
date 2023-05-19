@@ -61,6 +61,8 @@ def update_dns!(previous_ip, new_ip)
 
   http.use_ssl = url.port == 443
   res = http.start { |http| http.request(req) }
+  log("Response code: #{res.code}")
+  log("Response body: #{res.body}")
   update_previous_ip!(previous_ip, new_ip)
 end
 
