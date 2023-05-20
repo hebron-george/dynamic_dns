@@ -57,7 +57,7 @@ def update_dns!(previous_ip, new_ip)
 
   url  = URI.parse(url)
   http = Net::HTTP.new(url.host, url.port)
-  req  = Net::HTTP::Get.new(url.path)
+  req  = Net::HTTP::Get.new(url)
 
   http.use_ssl = url.port == 443
   res = http.start { |http| http.request(req) }
